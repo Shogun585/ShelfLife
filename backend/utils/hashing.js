@@ -7,8 +7,8 @@ const Hashing = {
 
         return hashedPassword;
     },
-    verifyHashedPassword : (hashedPassword, plainPassword) => {
-        return bcrypt.compare(plainPassword, hashedPassword);
+    verifyHashedPassword : async(hashedPassword, plainPassword) => {
+        return await bcrypt.compare(plainPassword, hashedPassword);
     }
 }
 
