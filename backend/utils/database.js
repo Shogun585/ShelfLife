@@ -13,9 +13,6 @@ try{
  
 
 const userSchema = new Schema({
-    _id : {
-        type : Schema.Types.ObjectId
-    },
     name : {
         type : Schema.Types.String,
         required : true,
@@ -42,9 +39,6 @@ const userSchema = new Schema({
 });
 
 const householdSchema = new Schema({
-    _id : {
-        type : Schema.Types.ObjectId
-    },
     name : {
         type : Schema.Types.String,
         required : true,
@@ -73,9 +67,6 @@ const householdSchema = new Schema({
 });
 
 const itemSchema = new Schema({
-    _id : {
-        type : Schema.Types.ObjectId,
-    },
     householdId : {
         type : Schema.Types.ObjectId,
         required : true
