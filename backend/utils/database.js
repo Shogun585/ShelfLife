@@ -6,13 +6,13 @@ const {Schema} = mongoose;
 
 try{
     mongoose.connect(MONGO_URI);
-    console.log("connected")
+    console.log("DB connection established !!")
 }catch(err){
     console.error(err);
 } 
  
 
-const userSchema = Schema({
+const userSchema = new Schema({
     _id : {
         type : Schema.Types.ObjectId
     },
@@ -33,14 +33,15 @@ const userSchema = Schema({
         minLength : 6,
     },
     householdId : {
-        type : Schema.Types.ObjectId
+        type : Schema.Types.ObjectId,
+        required : false
     },
     createdAt : {
         type : Schema.Types.Date
     }
 });
 
-const householdSchema = Schema({
+const householdSchema = new Schema({
     _id : {
         type : Schema.Types.ObjectId
     },
@@ -71,7 +72,7 @@ const householdSchema = Schema({
     }
 });
 
-const itemSchema = Schema({
+const itemSchema = new Schema({
     _id : {
         type : Schema.Types.ObjectId,
     },
