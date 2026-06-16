@@ -5,6 +5,7 @@ const app = express();
 
 const apiRouter = require('./api');
 
+app.use(express.json());
 app.use('/api', apiRouter);
 
 app.listen(PORT, ()=>{
