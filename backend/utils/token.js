@@ -16,9 +16,16 @@ const verifyAccessToken = (token) => {
     try{
         const decoded = jwt.verify(token, SECRET_KEY);
 
-        return decoded;
+        return {
+            success : true,
+            data : decoded
+        };
     }catch(err){
-        throw Error("Unauthorized");
+        console.error("Unauthorized");
+        return {
+            success : false,
+            data : err
+        };
     }
 }
 
