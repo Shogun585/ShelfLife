@@ -4,13 +4,21 @@ const MONGO_URI = process.env.MONGO_URI;
 
 const {Schema} = mongoose;
 
-try{
-    mongoose.connect(MONGO_URI);
-    console.log("DB connection established !!")
-}catch(err){
-    console.error(err);
-} 
- 
+const conenctToDB = async () => {
+    try{
+        const conn = await mongoose.connect(MONGO_URI);
+        console.log(`DB connection established, host : ${conn.connection.host}`)
+    }catch(err){
+        console.error(err);
+        process.exit(1);
+    }
+}
+
+conenctToDB()
+    .then()
+    .catch((err) => {
+        console.log(`DB Connection failed, ${err}`)
+    })
 
 const userSchema = new Schema({
     name : {
@@ -99,7 +107,7 @@ const itemSchema = new Schema({
         type : Schema.Types.Date
     },
     updatedAt : {
-        type : Schema.Types.Date
+        type : Schema   .Types.Date
     }
 });
 
