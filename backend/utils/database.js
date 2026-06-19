@@ -39,7 +39,8 @@ const userSchema = new Schema({
     },
     householdId : {
         type : Schema.Types.ObjectId,
-        required : false
+        required : false,
+        nullable : true
     },
     createdAt : {
         type : Schema.Types.Date
