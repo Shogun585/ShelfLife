@@ -60,7 +60,7 @@ const householdSchema = new Schema({
         uppercase : true
     },
     members : [{
-        type : Schema.Types.ObjectId,
+        type : Schema.Types.ObjectId || [],
         ref : 'User'
     }],
     wasteScore : {
