@@ -2,6 +2,7 @@ const express = require('express');
 const { authMiddleware } = require('../utils/middleware');
 const { user, household, item } = require('../utils/database');
 const { determineStatus } = require('../utils/expiry');
+const mongoose = require('mongoose');
 const router = express.Router();
 
 router.get('/', authMiddleware, async (req, res)=>{
@@ -69,6 +70,10 @@ router.post('/', authMiddleware, async(req, res)=>{
 
     const { name, category, expiryDate, quantity } = req.body;
 
+    const session = await mongoose.startSession();
+
+    session.startTransaction()
+
     try {
         const itemStatus = determineStatus(expiryDate);
 
@@ -84,17 +89,33 @@ router.post('/', authMiddleware, async(req, res)=>{
             updatedAt : new Date()
         });
 
+        const itemsListByStatus = await item.find({
+            addedBy : userId,
+            householdId : householdId
+        }).select(['_id', 'status']);
+
+        const totalItems = itemsListByStatus.length + 1;
+
+        const usedItems = itemsListByStatus.filter(item => item.status === 'used').length;
+
+        const wasteScore = Math.floor((usedItems/totalItems) * 100);
+
+        const updateScore = await household.findByIdAndUpdate(householdId, {
+            wasteScore : wasteScore
+        })
+
         return res.status(200).json({
             message : "Item added successfully"
         });    
     } catch (err) {
         console.error(err);
-        return res.status(500).json({
+        res.status(500).json({
             error : err.message
-        })
+        });
+        session.abortTransaction();
+    }finally{
+        session.endSession();
     }
-
-    
 });
 
 router.put('/:id', authMiddleware, async (req, res)=>{
@@ -150,8 +171,6 @@ router.put('/:id', authMiddleware, async (req, res)=>{
             error : err.message
         })
     }
-
-    
 });
 
 router.patch('/:id/:status', authMiddleware, async(req, res)=>{
@@ -186,6 +205,10 @@ router.patch('/:id/:status', authMiddleware, async(req, res)=>{
         })
     }
 
+    const session = await mongoose.startSession();
+
+    session.startTransaction();
+
     try{
         const updatedItem = await item.findById(itemId).findOneAndUpdate({
             householdId : householdId,
@@ -195,6 +218,21 @@ router.patch('/:id/:status', authMiddleware, async(req, res)=>{
             updatedAt : new Date()
         });
 
+        const itemsListByStatus = await item.find({
+            addedBy : userId,
+            householdId : householdId
+        }).select(['_id', 'status']);
+
+        const totalItems = itemsListByStatus.length;
+
+        const usedItems = itemsListByStatus.filter(item => item.status === 'used').length;
+
+        const wasteScore = Math.floor((usedItems/totalItems) * 100);
+
+        validHousehold.updateOne({
+            wasteScore : wasteScore
+        });
+
         return res.status(200).json({
             message : `Item with id ${itemId} was successfully in house-id ${householdId} by user-id ${userId}`
         });
@@ -202,10 +240,11 @@ router.patch('/:id/:status', authMiddleware, async(req, res)=>{
         console.error(err);
         return res.status(500).json({
             error : err.message
-        })
+        });
+        session.abortTransaction();
+    }finally{
+        session.endSession();
     }
-
-    
 });
 
 router.delete('/:id', authMiddleware, async(req, res)=>{
