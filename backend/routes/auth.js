@@ -4,7 +4,6 @@ const router = express.Router();
 const hash = require('../utils/hashing');
 const { user } = require('../utils/database');
 const { createAccessToken } = require('../utils/token');
-const { default: mongoose } = require('mongoose');
 
 router.post('/register', async(req, res)=>{
     const {name, email, password, householdId} = req.body;
@@ -19,30 +18,36 @@ router.post('/register', async(req, res)=>{
         });
     }
 
-    const newUser = await user.create({
-        name : name,
-        email : email,
-        password : await hash.createHashedPassword(password),
-        householdId : householdId || null,
-        createdAt : new Date()
-    } );
+    try {
+        const newUser = await user.create({
+            name : name,
+            email : email,
+            password : await hash.createHashedPassword(password),
+            householdId : householdId || null,
+            createdAt : new Date()
+        } );
 
-    const data = {
-        userId : newUser._id
-    }
-
-    const token = createAccessToken(data);
-
-    return res.status(200).json({
-        token : `Bearer ${token}`,
-        user : {
-            userId : newUser._id,
-            name : newUser.name,
-            email : newUser.email,
-            householdId : newUser.householdId
+        const data = {
+            userId : newUser._id
         }
-    });
 
+        const token = createAccessToken(data);
+
+        return res.status(200).json({
+            token : `Bearer ${token}`,
+            user : {
+                userId : newUser._id,
+                name : newUser.name,
+                email : newUser.email,
+                householdId : newUser.householdId
+            }
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            error : err.message
+        });
+    }
 });
 
 router.post('/login', async(req, res)=>{
@@ -68,21 +73,28 @@ router.post('/login', async(req, res)=>{
         });
     }
 
-    const data = {
-        userId : userExists._id
-    }
-
-    const token = createAccessToken(data);
-
-    return res.status(200).json({
-        token : `Bearer ${token}`,
-        user : {
-            userId : userExists._id,
-            name : userExists.name,
-            email : userExists.email,
-            householdId : userExists.householdId
+    try {
+        const data = {
+            userId : userExists._id
         }
-    });
+
+        const token = createAccessToken(data);
+
+        return res.status(200).json({
+            token : `Bearer ${token}`,
+            user : {
+                userId : userExists._id,
+                name : userExists.name,
+                email : userExists.email,
+                householdId : userExists.householdId
+            }
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            error : err.message
+        });
+    }
 });
 
 module.exports = router;

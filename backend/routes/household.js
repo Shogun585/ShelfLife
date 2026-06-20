@@ -50,12 +50,15 @@ router.post('/', authMiddleware, async(req, res)=>{
             }
         });
 
-        res.status(200).json({
+        return res.status(200).json({
             message : `Household created successfully.`
         });
     }catch(err){
         await session.abortTransaction()
         console.error(err);
+        return res.status(500).json({
+            error : err.message
+        });
     }finally{
         session.endSession();
     }
@@ -89,7 +92,9 @@ router.post('/join', authMiddleware, async(req, res)=>{
     session.startTransaction();
 
     try {
-        const alreadyAMember = validHousehold.members.filter(id => id === userId);
+        const alreadyAMember = validHousehold.members;
+
+        alreadyAMember.filter(id => id === userId);
 
         if(alreadyAMember.length !== 0){
             return res.status(409).json({
@@ -106,7 +111,10 @@ router.post('/join', authMiddleware, async(req, res)=>{
         });
     } catch (err) {
         await session.abortTransaction();
-        console.error((err));
+        console.error(err);
+        return res.status(500).json({
+            error : err.message
+        });
     }finally{
         await session.endSession();
     }
@@ -144,19 +152,26 @@ router.get('/:id/members', authMiddleware, async(req, res) => {
 
     const householdId = req.params.id;
 
-    const householdDetails = await household.findById(householdId);
+    try {
+        const householdDetails = await household.findById(householdId);
 
-    const members = await householdDetails.populate({
-        path : 'members',
-        select : 'name email householdId'
-    })
+        const members = await householdDetails.populate({
+            path : 'members', 
+            select : ['name', 'email', 'householdId']
+        });
 
-    const memberDetails = await members.$getPopulatedDocs();
+        const memberDetails = members.$getPopulatedDocs();
 
-    return res.status(200).json({
-        message : "Details fetched successfully!",
-        household_members : memberDetails
-    });
+        return res.status(200).json({
+            message : "Details fetched successfully!",
+            household_members : memberDetails
+        });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({
+            error : err.message
+        });
+    }
 });
 
 module.exports = router;
