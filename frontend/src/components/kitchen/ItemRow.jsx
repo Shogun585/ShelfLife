@@ -24,7 +24,7 @@ export function ItemRow({ item, onDelete }) {
       </div>
       <span className="hidden text-xs font-medium text-amber-900/70 sm:inline">{STATUS_LABEL[status]}</span>
       <button
-        onClick={() => onDelete(item.id)}
+        onClick={() => onDelete(item._id)}
         className="rounded-md px-2 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-50"
       >
         Remove
