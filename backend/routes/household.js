@@ -181,4 +181,60 @@ router.get('/:id/members', authMiddleware, async(req, res) => {
     }
 });
 
+router.post('/switch', authMiddleware, async(req, res) => {
+    const {inviteCode} = req.body;
+    const userId = req.userId;
+
+    try{
+        const newHouse = await household.findOne({
+            inviteCode : inviteCode
+        });
+
+        console.log(newHouse)
+
+        if(!newHouse){
+            return res.status(404).json({
+                message : "Invalid invite code. Try again!"
+            });
+        }
+
+        const userDetails = await user.findById(userId);
+
+        const prevailingHouseholdId = userDetails.householdId;
+
+        
+
+        if(String(prevailingHouseholdId) === String(newHouse._id)){
+            return res.status(409).json({
+                message : "You already live in this household!!"
+            });
+        }
+
+        if(prevailingHouseholdId){
+            await household.findByIdAndUpdate(prevailingHouseholdId, {
+                $pull : {
+                    members : userId
+                }
+            });
+        }
+
+        newHouse.members.push(userId);
+
+        await newHouse.save();
+
+        userDetails.householdId = newHouse._id;
+
+        await userDetails.save();
+
+        return res.status(200).json({
+            message : "Successfully switched households!"
+        });
+    }catch(err){
+        console.error(err);
+        return res.status(500).json({
+            error : err.message
+        });
+    }
+}); 
+
 module.exports = router;
