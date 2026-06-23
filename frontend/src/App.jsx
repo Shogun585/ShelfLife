@@ -7,6 +7,14 @@ import HouseholdSetup from "./pages/HouseholdSetup";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute"; // Import the bouncer
 
 export default function App() {
+
+  useEffect(() => {
+    console.log(
+      "%cBuilt with ☕ by Abhilash Singh", 
+      "color: #d97706; font-size: 16px; font-weight: bold; font-family: monospace;"
+    );
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
