@@ -131,11 +131,18 @@ router.get('/me', authMiddleware, async(req, res)=>{
         });
     }
 
+    let houseDetails = null;
+    if (userDetails.householdId) {
+        houseDetails = await household.findById(userDetails.householdId);
+    }
+
     return res.status(200).json({
         user_id : userId,
         user_name : userDetails.name,
         user_email : userDetails.email,
-        household_id : userDetails.householdId
+        household_id : userDetails.householdId,
+        household_name : houseDetails ? houseDetails.name : "My Fridge",
+        invite_code : houseDetails ? houseDetails.inviteCode : null
     });
 });
 
