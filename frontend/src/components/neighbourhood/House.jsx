@@ -1,11 +1,15 @@
 import { forwardRef } from "react";
 import { motion } from "framer-motion";
+import house_teal from "../../assets/house_teal.webp";
+import house_yellow from "../../assets/house_yellow.webp";
+import house_blue from "../../assets/house_blue.webp";
+import house_red from "../../assets/house_red.webp";
 
 const HOUSE_SRC = {
-  teal: "/house_teal.png",
-  yellow: "/house_yellow.png",
-  blue: "/house_blue.png",
-  red: "/house_red.png",
+  teal: house_teal,
+  yellow: house_yellow,
+  blue: house_blue,
+  red: house_red,
 };
 
 export const House = forwardRef(({ variant, isUser = false, onClick }, ref) => {

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { House } from "./House";
+import garden_bg from "../../assets/garden_bg.webp";
 
 const HOUSES = [
   "yellow", "blue", "red", "yellow", "blue",
@@ -84,7 +85,7 @@ export default function Neighborhood() {
             {[...Array(8)].map((_, i) => (
               <img 
                 key={i}
-                src="/garden_bg.png"
+                src={garden_bg}
                 alt="garden landscape"
                 className={`h-full w-auto shrink-0 object-cover ${i !== 0 ? '-ml-[2px]' : ''} ${i % 2 !== 0 ? 'scale-x-[-1]' : ''}`}
                 draggable={false}

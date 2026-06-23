@@ -1,6 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Changed to React Router DOM
+import { useNavigate } from "react-router-dom";
 import { InventoryModal } from "../components/kitchen/InventoryModal";
+import kitchen_background from "../assets/kitchen_background.webp";
+
+
 
 export default function KitchenPage() {
   const navigate = useNavigate();
@@ -9,7 +12,7 @@ export default function KitchenPage() {
   return (
     <div
       className="relative min-h-screen w-full cursor-pointer bg-cover bg-center"
-      style={{ backgroundImage: `url(/kitchen_background.png)` }} // Direct public folder path
+      style={{ backgroundImage: `url(${kitchen_background})` }} 
       onClick={() => setOpen(true)}
     >
       <button

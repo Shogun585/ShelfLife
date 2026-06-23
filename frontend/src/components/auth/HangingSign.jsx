@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import rope_segment from "../../assets/rope_segment.webp";
+import wooden_sign from "../../assets/wooden_sign.webp";
 
 export function HangingSign({ children }) {
   return (
@@ -21,14 +23,14 @@ export function HangingSign({ children }) {
 
             <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-20">
               <img 
-                src="/rope_segment.png" 
+                src={rope_segment} 
                 alt="rope" 
                 className="absolute left-[15%] w-9 h-auto drop-shadow-md ml-7" 
                 style={{ bottom: "calc(100% - 45px)" }}
                 draggable={false}
               />
               <img 
-                src="/rope_segment.png" 
+                src={rope_segment} 
                 alt="rope" 
                 className="absolute right-[15%] w-9 h-auto drop-shadow-md mr-7" 
                 style={{ bottom: "calc(100% - 45px)" }}
@@ -37,7 +39,7 @@ export function HangingSign({ children }) {
             </div>
 
             <img
-              src="/wooden_sign.png"
+              src={wooden_sign}
               alt="ShelfLife sign"
               className="absolute inset-0 h-full w-full select-none object-fill drop-shadow-2xl z-10 rounded-xl"
               draggable={false}
