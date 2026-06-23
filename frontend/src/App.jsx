@@ -5,6 +5,7 @@ import KitchenPage from "./pages/KitchenPage";
 import Neighborhood from "./components/neighbourhood/Neighbourhood";
 import HouseholdSetup from "./pages/HouseholdSetup";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute"; // Import the bouncer
+import { useEffect } from "react";
 
 export default function App() {
 
