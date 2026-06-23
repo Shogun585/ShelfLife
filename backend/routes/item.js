@@ -29,11 +29,19 @@ router.get('/', authMiddleware, async (req, res)=>{
     const {status, category} = req.query;
 
     try {
-        const itemsList = await item.find({
-            householdId : householdId,
-            status : status,
-            category : category
-        });
+        const query = {
+            householdId : householdId
+        };
+
+        if(status){
+            query.status = status;
+        }
+
+        if(category){
+            query.category = category;
+        }
+
+        const itemsList = await item.find(query);
 
         return res.status(200).json({
             message : "List of items fetched suuccessfully",
