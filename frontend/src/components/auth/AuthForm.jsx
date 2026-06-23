@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../lib/api";
 
 export function AuthForm() {
   const [mode, setMode] = useState("login");
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
   
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +18,10 @@ export function AuthForm() {
     e.preventDefault();
     setError("");
     setIsLoading(true);
+
+    const email = emailRef.current?.value;
+    const password = passwordRef.current?.value;
+    const name = nameRef.current?.value;
 
     try {
       const endpoint = mode === "login" ? "/auth/login" : "/auth/register";
@@ -43,66 +48,75 @@ export function AuthForm() {
   };
 
   return (
-    <form onSubmit={onSubmit} className="flex w-full flex-col gap-3 text-amber-950 p-10 pb-10">
-      <h1 className="mb-2 text-center font-serif text-3xl font-bold tracking-wide text-amber-950 drop-shadow">
-        ShelfLife
-      </h1>
-
-      <div className="mx-auto flex rounded-full bg-amber-950/15 p-1 text-xs font-semibold mb-2">
+    <form onSubmit={onSubmit} className="flex w-full flex-col gap-4 mt-3 ml-3 px-6 pb-4 sm:px-8">
+      
+      <div className="mx-auto mb-4 flex w-max rounded-full bg-amber-950/20 p-1 shadow-inner backdrop-blur-sm">
         <button
           type="button"
           onClick={() => { setMode("login"); setError(""); }}
-          className={`rounded-full px-4 py-1.5 transition ${
-            mode === "login" ? "bg-amber-50 text-amber-950 shadow" : "text-amber-950/70"
+          className={`rounded-full px-6 py-2 text-sm font-black tracking-wide transition-all duration-300 ${
+            mode === "login" 
+              ? "bg-amber-100 text-amber-950 shadow-md" 
+              : "text-amber-950/60 hover:text-amber-950"
           }`}
         >
-          Login
+          LOGIN
         </button>
         <button
           type="button"
           onClick={() => { setMode("register"); setError(""); }}
-          className={`rounded-full px-4 py-1.5 transition ${
-            mode === "register" ? "bg-amber-50 text-amber-950 shadow" : "text-amber-950/70"
+          className={`rounded-full px-6 py-2 text-sm font-black tracking-wide transition-all duration-300 ${
+            mode === "register" 
+              ? "bg-amber-100 text-amber-950 shadow-md" 
+              : "text-amber-950/60 hover:text-amber-950"
           }`}
         >
-          Register
+          REGISTER
         </button>
       </div>
 
       {mode === "register" && (
         <input
           required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Name"
-          className="rounded-lg bg-amber-50/90 px-4 py-3 text-sm outline-none ring-amber-900/40 placeholder:text-amber-900/50 focus:ring-2 font-medium"
+          type="text"
+          ref={nameRef}
+          placeholder="Your Name"
+          className="w-full rounded-xl border-2 border-amber-900/10 bg-amber-50/60 px-5 py-2 font-medium text-amber-950 placeholder-amber-950/50 shadow-inner backdrop-blur-sm outline-none transition-colors transition-shadow placeholder:font-medium focus:border-amber-600 focus:bg-amber-50 focus:shadow-[0_0_15px_rgba(217,119,6,0.2)]"
         />
       )}
+      
       <input
         required
         type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-        className="rounded-lg bg-amber-50/90 px-4 py-3 text-sm outline-none ring-amber-900/40 placeholder:text-amber-900/50 focus:ring-2 font-medium"
+        ref={emailRef}
+        placeholder="Email Address"
+        className="w-full rounded-xl border-2 border-amber-900/10 bg-amber-50/60 px-5 py-2 font-medium text-amber-950 placeholder-amber-950/50 shadow-inner backdrop-blur-sm outline-none transition-colors transition-shadow placeholder:font-medium focus:border-amber-600 focus:bg-amber-50 focus:shadow-[0_0_15px_rgba(217,119,6,0.2)]"
       />
+      
       <input
         required
         type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        ref={passwordRef}
         placeholder="Password"
-        className="rounded-lg bg-amber-50/90 px-4 py-3 text-sm outline-none ring-amber-900/40 placeholder:text-amber-900/50 focus:ring-2 font-medium"
+        className="w-full rounded-xl border-2 border-amber-900/10 bg-amber-50/60 px-5 py-2 font-medium text-amber-950 placeholder-amber-950/50 shadow-inner backdrop-blur-sm outline-none transition-colors transition-shadow placeholder:font-medium focus:border-amber-600 focus:bg-amber-50 focus:shadow-[0_0_15px_rgba(217,119,6,0.2)]"
       />
 
-      {error && <div className="text-red-600 text-sm font-bold text-center">{error}</div>}
+      {error && (
+        <div className="text-center text-sm font-bold text-rose-700 drop-shadow-sm">
+          {error}
+        </div>
+      )}
 
       <button
         type="submit"
         disabled={isLoading}
-        className="mt-2 rounded-lg bg-amber-900 px-4 py-3 text-sm font-bold uppercase tracking-wider text-amber-50 shadow-lg transition hover:bg-amber-950 active:translate-y-px disabled:opacity-50"
+        className="group relative mt-2 w-full overflow-hidden rounded-xl bg-gradient-to-br from-amber-800 to-amber-950 px-5 py-2 text-sm font-black tracking-widest text-amber-50 shadow-lg ring-2 ring-amber-900/30 transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(120,53,15,0.6)] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100"
       >
-        {isLoading ? "Loading..." : mode === "login" ? "Enter the neighborhood" : "Move in"}
+        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full"></div>
+        
+        <span className="relative z-10 uppercase drop-shadow-md">
+          {isLoading ? "Loading..." : mode === "login" ? "Enter the neighborhood" : "Move in"}
+        </span>
       </button>
     </form>
   );
