@@ -6,12 +6,37 @@ import { ItemRow } from "./ItemRow";
 import { AddItemForm } from "./AddItemForm";
 import { InviteModal } from "./InviteModal";
 import { api } from "../../lib/api";
+import { useNavigate } from "react-router-dom";
 
 export function InventoryModal({ open, onClose }) {
   const { visible, counts, filters, setFilters, add, remove } = useInventory();
 
   const [household, setHousehold] = useState({ name: "Loading...", code: "" });
   const [showInvite, setShowInvite] = useState(false);
+
+  const navigate = useNavigate();
+  
+  const [showAddItem, setShowAddItem] = useState(false); 
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        if (showAddItem) {
+          setShowAddItem(false);
+        } 
+        else {
+          navigate("/neighborhood");
+        }
+        
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [showAddItem, navigate]);
 
   useEffect(() => {
     if (open) {
@@ -60,7 +85,7 @@ export function InventoryModal({ open, onClose }) {
                 <div className="flex flex-col gap-2 items-end">
                   <button
                     onClick={onClose}
-                    className="rounded-md px-3 py-1 text-sm font-medium text-amber-900 hover:bg-amber-200/60"
+                    className="rounded-md px-3 py-1 text-sm font-medium text-amber-900 hover:bg-red-200/60 hover:text-red-500"
                   >
                     Close ✕
                   </button>
