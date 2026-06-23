@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { InventoryModal } from "../components/kitchen/InventoryModal";
 import kitchen_background from "../assets/kitchen_background.webp";
 
-
-
 export default function KitchenPage() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);

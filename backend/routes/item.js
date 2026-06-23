@@ -41,7 +41,7 @@ router.get('/', authMiddleware, async (req, res)=>{
             query.category = category;
         }
 
-        const itemsList = await item.find(query);
+        const itemsList = await item.find(query).populate('addedBy', 'name');
 
         return res.status(200).json({
             message : "List of items fetched suuccessfully",

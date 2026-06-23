@@ -19,7 +19,7 @@ export function ItemRow({ item, onDelete }) {
           </span>
         </div>
         <p className="text-xs text-amber-900/70">
-          Qty {item.quantity} · {expiryText} · added by {item.addedBy}
+          Qty {item.quantity} · {expiryText} · added by {item.addedBy.name}
         </p>
       </div>
       <span className="hidden text-xs font-medium text-amber-900/70 sm:inline">{STATUS_LABEL[status]}</span>
