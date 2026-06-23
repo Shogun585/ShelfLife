@@ -56,3 +56,12 @@
     color: var(--foreground);
   }
 }
+
+.hardware-accelerated {
+ 
+  will-change: transform;
+
+  transform: translateZ(0); 
+  
+  backface-visibility: hidden;
+}

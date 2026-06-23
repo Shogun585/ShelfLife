@@ -66,7 +66,7 @@ export default function Neighborhood() {
               : 0,
           } : undefined}
           transition={zooming ? { duration: 0.9, ease: [0.7, 0, 0.3, 1] } : undefined}
-          className="relative flex h-screen w-max cursor-grab active:cursor-grabbing"
+          className="relative flex h-screen w-max cursor-grab active:cursor-grabbing hardware-accelerated"
           style={{ x }}
         >
           <div className="relative z-10 flex h-full items-end gap-[3vh] px-[15vh] pb-[22vh]">
