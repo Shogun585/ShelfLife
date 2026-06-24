@@ -110,7 +110,9 @@ router.post('/', authMiddleware, async(req, res)=>{
 
         const updateScore = await household.findByIdAndUpdate(householdId, {
             wasteScore : wasteScore
-        })
+        });
+
+        await updateScore.save();
 
         return res.status(200).json({
             message : "Item added successfully"
@@ -237,9 +239,11 @@ router.patch('/:id/:status', authMiddleware, async(req, res)=>{
 
         const wasteScore = Math.floor((usedItems/totalItems) * 100);
 
-        validHousehold.updateOne({
+        await validHousehold.updateOne({
             wasteScore : wasteScore
         });
+
+        validHousehold.save()
 
         return res.status(200).json({
             message : `Item with id ${itemId} was successfully in house-id ${householdId} by user-id ${userId}`
