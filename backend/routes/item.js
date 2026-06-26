@@ -5,6 +5,23 @@ const { determineStatus } = require('../utils/expiry');
 const mongoose = require('mongoose');
 const router = express.Router();
 
+async function updateHouseholdWasteScore(householdId, session = null) {
+    const queryOptions = session ? { session } : {};
+    
+    const allItems = await item.find({ householdId }, null, queryOptions).select('status');
+
+    const resolvedItems = allItems.filter(i => i.status === 'used' || i.status === 'wasted');
+    
+    let wasteScore = 0;
+    if (resolvedItems.length > 0) {
+        const wastedItems = resolvedItems.filter(i => i.status === 'wasted').length;
+        const usedItems = resolvedItems.filter(i => i.status === 'used').length;
+        wasteScore = Math.floor((wastedItems / (wastedItems + usedItems)) * 100);
+    }
+
+    return wasteScore;
+}
+
 router.get('/', authMiddleware, async (req, res)=>{
     const userId = req.userId;
     
@@ -35,6 +52,10 @@ router.get('/', authMiddleware, async (req, res)=>{
 
         if(status){
             query.status = status;
+        }else{
+            query.status = {
+                $nin : ['used', 'wasted']
+            };
         }
 
         if(category){
@@ -97,22 +118,9 @@ router.post('/', authMiddleware, async(req, res)=>{
             updatedAt : new Date()
         });
 
-        const itemsListByStatus = await item.find({
-            addedBy : userId,
-            householdId : householdId
-        }).select(['_id', 'status']);
+        const updatedScore = await updateHouseholdWasteScore(householdId, session);
 
-        const totalItems = itemsListByStatus.length + 1;
-
-        const usedItems = itemsListByStatus.filter(item => item.status === 'used').length;
-
-        const wasteScore = Math.floor((usedItems/totalItems) * 100);
-
-        const updateScore = await household.findByIdAndUpdate(householdId, {
-            wasteScore : wasteScore
-        });
-
-        await updateScore.save();
+        validHousehold.set('wasteScore', updatedScore).save();
 
         return res.status(200).json({
             message : "Item added successfully"
@@ -161,10 +169,7 @@ router.put('/:id', authMiddleware, async (req, res)=>{
     }
 
     try {
-        const updatedItem = await item.findById(itemId).findOneAndUpdate({
-            householdId : householdId,
-            addedBy : userId
-        }, {
+        const updatedItem = await item.findByIdAndUpdate(itemId, {
             name : name,
             category : category,
             quantity : parseInt(quantity),
@@ -220,30 +225,14 @@ router.patch('/:id/:status', authMiddleware, async(req, res)=>{
     session.startTransaction();
 
     try{
-        const updatedItem = await item.findById(itemId).findOneAndUpdate({
-            householdId : householdId,
-            addedBy : userId
-        }, {
+        const updatedItem = await item.findByIdAndUpdate(itemId, {
             status : status,
             updatedAt : new Date()
         });
 
-        const itemsListByStatus = await item.find({
-            addedBy : userId,
-            householdId : householdId
-        }).select(['_id', 'status']);
+        const updatedScore = await updateHouseholdWasteScore(householdId, session);
 
-        const totalItems = itemsListByStatus.length;
-
-        const usedItems = itemsListByStatus.filter(item => item.status === 'used').length;
-
-        const wasteScore = Math.floor((usedItems/totalItems) * 100);
-
-        await validHousehold.updateOne({
-            wasteScore : wasteScore
-        });
-
-        validHousehold.save()
+        validHousehold.set('wasteScore', updatedScore).save();
 
         return res.status(200).json({
             message : `Item with id ${itemId} was successfully in house-id ${householdId} by user-id ${userId}`
@@ -291,11 +280,8 @@ router.delete('/:id', authMiddleware, async(req, res)=>{
     }
 
     try {
-        const deleteItem = await item.findOneAndDelete({
-            _id : itemId,
-            householdId : householdId,
-            addedBy: userId
-        });
+        const deleteItem = await item.findByIdAndDelete(itemId);
+
 
         return res.status(200).json({
             message : "Item deleted successfully."
