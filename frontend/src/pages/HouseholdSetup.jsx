@@ -37,8 +37,8 @@ export default function HouseholdSetup() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-200 via-sky-100 to-amber-100">
       <HangingSign>
-        <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3 text-amber-950 pl-10 pb-10">
-          <h1 className="mb-2 text-center font-serif text-2xl font-bold tracking-wide text-amber-950 drop-shadow">
+        <form onSubmit={handleSubmit} className="flex w-full flex-col gap-3 text-amber-950 pl-10 pb-10 pr-8">
+          <h1 className="mb-6 text-center font-serif text-2xl font-bold tracking-wide text-amber-950 drop-shadow">
             Where do you live?
           </h1>
 
@@ -66,7 +66,7 @@ export default function HouseholdSetup() {
           <p className="text-center text-xs font-medium text-amber-900/80 mb-2">
             {mode === "create" 
               ? "Give your new apartment or house a name." 
-              : "Enter the 6-character invite code from your roommate."}
+              : "Enter the invite code."}
           </p>
 
           <input
