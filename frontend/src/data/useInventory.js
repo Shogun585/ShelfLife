@@ -50,17 +50,8 @@ export function useInventory() {
     }
   };
 
-  const remove = async (id) => {
-    try {
-
-      await api.delete(`/items/${id}`);
-      
-
-      setItems((prev) => prev.filter((item) => item._id !== id));
-    } catch (err) {
-      console.error("Failed to remove item", err);
-      alert("Couldn't throw that item away. Try again.");
-    }
+  const remove = (id) => {
+    setItems((prev) => prev.filter((item) => item._id !== id));
   };
 
 
