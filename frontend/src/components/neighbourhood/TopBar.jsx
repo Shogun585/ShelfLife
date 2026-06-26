@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { api } from "../../lib/api";
+import { ScoreDashboard } from "./ScoreDashboard";
 
 export function TopBar() {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ export function TopBar() {
           </div>
 
           <div className="flex items-center gap-4">
+            <ScoreDashboard />
             <button
               onClick={() => setShowModal(true)}
               className="text-sm font-semibold text-amber-200 transition-colors hover:text-white"
