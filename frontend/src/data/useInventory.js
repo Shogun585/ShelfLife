@@ -1,68 +1,51 @@
 import { useState, useEffect, useMemo } from "react";
 import { api } from "../lib/api";
 import { getStatus } from "../lib/status";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useInventory() {
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [filters, setFilters] = useState({ category: "All", status: "All", sort: "expiry-asc" });
 
-  
-  const fetchItems = async () => {
-    try {
-      setIsLoading(true);
+  const queryClient = useQueryClient();
+
+  const {data : items = [], isLoading, error } = useQuery({
+    queryKey : ["fridge-items"],
+    queryFn : async () => {
       const response = await api.get("/items");
-  
-      setItems(response.data.list_of_items || []);
-    } catch (err) {
-      setError("Failed to load fridge contents.");
-      console.error(err);
-    } finally {
-      setIsLoading(false);
+      return response.data.list_of_items || [];
     }
-  };
+  });
 
-  
-  useEffect(() => {
-    fetchItems();
-  }, []);
-
-  
-  const add = async (newItem) => {
-    try {
-  
-      const formattedItem = {
-        ...newItem,
-        category: newItem.category.toLowerCase()
-      };
-      
-  
-      await api.post("/items", formattedItem);
-      
-  
-      
-      await fetchItems();
-      
-    } catch (err) {
-      console.error("Failed to add item", err);
+  const addMutation = useMutation({
+    mutationFn : async (newItem) => {
+        const formattedItem = {...newItem, category : newItem.category.toLowerCase()}
+        return await api.post("/items", formattedItem);
+    },
+    onSuccess : () => {
+      queryClient.invalidateQueries({
+        queryKey : ["fridge-items"]
+      });
+    },
+    onError : (err) => {
+      console.error("Failed to add item : ", err);
       alert("Couldn't add item to the fridge. Please try again.");
     }
-  };
+  });
 
+  const add = (newItem) => addMutation.mutate(newItem);
+
+  
   const remove = (id) => {
-    setItems((prev) => prev.filter((item) => item._id !== id));
+    queryClient.setQueryData(["fridge-items"], (oldItems) => 
+      oldItems ? oldItems.filter((item) => item._id !== id) : []
+    );
   };
-
 
   const visible = useMemo(() => {
     return items
       .filter((item) => {
-
         if (filters.category !== "All" && item.category !== filters.category.toLowerCase()) return false;
         
-
-
         const currentStatus = getStatus(item.expiryDate);
         if (filters.status !== "All" && currentStatus !== filters.status) return false;
         
