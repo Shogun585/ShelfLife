@@ -1,5 +1,7 @@
 const { verifyAccessToken } = require("./token");
 
+const {rateLimit} = require('express-rate-limit');
+
 function authMiddleware(req, res, next){
     const authToken = req.headers.authorization;
 
@@ -36,6 +38,28 @@ function authMiddleware(req, res, next){
     }
 }
 
+const globalLimiter = rateLimit({
+    windowMs : 15 * 60 * 100,
+    limit : 100,
+    message : {
+        message : "Too many requests from this IP, please try again after some time."
+    },
+    standardHeaders : true,
+    legacyHeaders : false
+});
+
+const authLimiter = rateLimit({
+    windowMs : 60 * 60 * 100,
+    limit : 5,
+    message : {
+        message : "Too many requests from this IP, please try again after some time."
+    },
+    standardHeaders : true,
+    legacyHeaders : true
+});
+
 module.exports = {
-    authMiddleware
+    authMiddleware,
+    globalLimiter,
+    authLimiter
 }
