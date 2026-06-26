@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 
-export function InviteModal({ open, onClose, inviteCode, householdName }) {
+export default function InviteModal({ open, onClose, inviteCode, householdName }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {

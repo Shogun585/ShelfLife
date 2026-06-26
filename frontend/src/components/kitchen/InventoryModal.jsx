@@ -1,12 +1,14 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useInventory } from "../../data/useInventory";
 import { ItemFilters } from "./ItemFilters";
 import { ItemRow } from "./ItemRow";
 import { AddItemForm } from "./AddItemForm";
-import { InviteModal } from "./InviteModal";
 import { api } from "../../lib/api";
 import { useNavigate } from "react-router-dom";
+
+const importInviteModal = () => import('./InviteModal');
+const InviteModal = lazy(importInviteModal);
 
 export function InventoryModal({ open, onClose }) {
   const { visible, counts, filters, setFilters, add, remove } = useInventory();
@@ -90,6 +92,8 @@ export function InventoryModal({ open, onClose }) {
                     Close ✕
                   </button>
                   <button
+                    onMouseEnter={importInviteModal}
+                    onFocus={importInviteModal}
                     onClick={() => setShowInvite(true)}
                     className="text-xs font-bold uppercase tracking-wide text-amber-700 hover:text-amber-900 underline underline-offset-2"
                   >
@@ -119,12 +123,15 @@ export function InventoryModal({ open, onClose }) {
         )}
       </AnimatePresence>
 
-      <InviteModal 
-        open={showInvite} 
-        onClose={() => setShowInvite(false)} 
-        inviteCode={household.code}
-        householdName={household.name}
-      />
+      <Suspense fallback={null}>
+        <InviteModal 
+          open={showInvite} 
+          onClose={() => setShowInvite(false)} 
+          inviteCode={household.code}
+          householdName={household.name}
+        />
+      </Suspense>
+      
     </>
   );
 }
