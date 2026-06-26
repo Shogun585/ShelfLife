@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
 import AuthPage from "./pages/AuthPage";
-import KitchenPage from "./pages/KitchenPage";
 import Neighborhood from "./components/neighbourhood/Neighbourhood";
 import HouseholdSetup from "./pages/HouseholdSetup";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute"; // Import the bouncer
-import { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
+
+const KitchenPage = React.lazy(() => import('./pages/KitchenPage'))
 
 export default function App() {
 
@@ -44,7 +44,9 @@ export default function App() {
           path="/kitchen" 
           element={
             <ProtectedRoute>
-              <KitchenPage />
+              <Suspense fallback={null}>
+                <KitchenPage />
+              </Suspense>
             </ProtectedRoute>
           } 
         />

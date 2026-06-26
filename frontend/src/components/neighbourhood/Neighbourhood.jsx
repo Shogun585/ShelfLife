@@ -5,6 +5,8 @@ import { House } from "./House";
 import garden_bg from "../../assets/garden_bg.webp";
 import { TopBar } from "./TopBar";
 
+const preloadKitchen = () => import('../../pages/KitchenPage');
+
 const HOUSES = [
   "yellow", "blue", "red", "yellow", "blue",
   "teal", // user
@@ -66,18 +68,27 @@ export default function Neighborhood() {
           style={{ x }}
         >
           <div className="relative z-10 flex h-full items-end gap-[3vh] px-[15vh] pb-[22vh]">
-            {HOUSES.map((variant, i) => (
-              <House
-                key={i}
-                variant={variant}
-                isUser={i === USER_INDEX}
-                ref={i === USER_INDEX ? userHouseRef : null}
-                onClick={() => {
-                  if (Math.abs(x.get() - dragStartX.current) > 6) return;
-                  if (i === USER_INDEX) handleEnter();
-                }}
-              />
-            ))}
+            {
+              HOUSES.map((variant, i) => (
+                <div
+                  key={i}
+                  onMouseEnter={() => {
+                    if(i == USER_INDEX ) preloadKitchen();
+                  }}
+                >
+                    <House
+                      key={i}
+                      variant={variant}
+                      isUser={i === USER_INDEX}
+                      ref={i === USER_INDEX ? userHouseRef : null}
+                      onClick={() => {
+                        if (Math.abs(x.get() - dragStartX.current) > 6) return;
+                        if (i === USER_INDEX) handleEnter();
+                      }}
+                    />
+                </div>
+              ))
+            }
           </div>
 
           <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden">
