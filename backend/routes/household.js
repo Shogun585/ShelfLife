@@ -142,7 +142,8 @@ router.get('/me', authMiddleware, async(req, res)=>{
         user_email : userDetails.email,
         household_id : userDetails.householdId,
         household_name : houseDetails ? houseDetails.name : "My Fridge",
-        invite_code : houseDetails ? houseDetails.inviteCode : null
+        invite_code : houseDetails ? houseDetails.inviteCode : null,
+        wasteScore : houseDetails.wasteScore
     });
 });
 
