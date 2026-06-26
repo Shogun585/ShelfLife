@@ -42,33 +42,57 @@ export function TopBar() {
 
   return (
     <>
-      <div className="fixed top-0 left-0 z-40 md:z-20 w-full border-b border-amber-50/20 bg-amber-950/40 px-6 py-3 text-amber-50 shadow-lg backdrop-blur-md">
+      {/* 1. THE MAIN NAVIGATION BAR (Responsive padding) */}
+      <div className="fixed top-0 left-0 z-40 w-full border-b border-amber-50/20 bg-amber-950/40 px-4 py-3 sm:px-6 md:z-20 text-amber-50 shadow-lg backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <div className="flex items-center gap-3">
+          
+          {/* LEFT: Greeting */}
+          <div className="flex items-center gap-2 sm:gap-3">
             <span className="text-xl">👋</span>
-            <span className="font-medium tracking-wide">Welcome, {userName}</span>
+            {/* Desktop: Full Greeting */}
+            <span className="hidden font-medium tracking-wide sm:block">
+              Welcome, {userName}
+            </span>
+            {/* Mobile: Compact Greeting */}
+            <span className="font-medium tracking-wide sm:hidden">
+              {userName}
+            </span>
           </div>
 
-          <div className="flex items-center gap-4">
+          {/* RIGHT: Controls */}
+          {/* Mobile gap-2, Desktop gap-4 */}
+          <div className="flex items-center gap-2 sm:gap-4">
             <ScoreDashboard />
+            
             <button
               onClick={() => setShowModal(true)}
+              title="Switch House"
               className="text-sm font-semibold text-amber-200 transition-colors hover:text-white"
             >
-              Switch House
+              {/* Desktop: Full Text */}
+              <span className="hidden md:block">Switch House</span>
+              {/* Mobile: Compact Icon */}
+              <span className="text-lg md:hidden">🏠</span>
             </button>
-            <div className="h-4 w-px bg-amber-50/30"></div>
+            
+            <div className="hidden h-4 w-px bg-amber-50/30 sm:block"></div>
+            
             <button
               onClick={handleLogout}
-              className="rounded-md bg-rose-600/80 px-4 py-1.5 text-sm font-bold shadow transition hover:bg-rose-500"
+              className="rounded-md bg-rose-600/80 px-3 py-1.5 sm:px-4 text-sm font-bold shadow transition hover:bg-rose-500"
             >
               Logout
             </button>
           </div>
+
+        </div>
+      </div>
+      <div className="pointer-events-none fixed left-1/2 top-20 z-30 -translate-x-1/2 transition-all lg:top-4">
+        <div className="whitespace-nowrap rounded-full bg-amber-950/90 border border-amber-900/50 px-4 py-1.5 text-xs font-bold text-white shadow-lg backdrop-blur-md sm:px-5 sm:py-2 sm:text-sm">
+          Drag the street <span className="opacity-50">·</span> tap your home to enter
         </div>
       </div>
 
-      {/* THE SWITCH HOUSE MODAL */}
       <AnimatePresence>
         {showModal && (
           <motion.div

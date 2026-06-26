@@ -49,10 +49,6 @@ export default function Neighborhood() {
       <div className="relative h-[100vh] w-full overflow-hidden bg-[#87CEEB]">
         <TopBar/> 
 
-        <div className="pointer-events-none absolute left-1/2 top-[12vh] md:top-[2vh]  z-30 -translate-x-1/2 rounded-full bg-amber-950/80 px-[2vh] py-[1vh] text-[1.5vh] font-medium text-amber-50 shadow-lg backdrop-blur whitespace-nowrap">
-          Drag the street &nbsp;·&nbsp; tap your home to enter
-        </div>
-
         <motion.div
           drag={zooming ? false : "x"}
           dragConstraints={containerRef}
