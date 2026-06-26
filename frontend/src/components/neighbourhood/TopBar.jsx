@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { api } from "../../lib/api";
 import { ScoreDashboard } from "./ScoreDashboard";
+
+const importSwitchModal = () => import('./SwitchHouseModal');
+const SwitchHouseModal = lazy(importSwitchModal);
 
 export function TopBar() {
   const navigate = useNavigate();
@@ -65,14 +68,16 @@ export function TopBar() {
             <ScoreDashboard />
             
             <button
-              onClick={() => setShowModal(true)}
+              onMouseEnter={importSwitchModal}
+              onFocus={importSwitchModal}
+              onClick={()=>setShowModal(true)}
               title="Switch House"
               className="text-sm font-semibold text-amber-200 transition-colors hover:text-white"
             >
-              {/* Desktop: Full Text */}
+
               <span className="hidden md:block">Switch House</span>
-              {/* Mobile: Compact Icon */}
               <span className="text-lg md:hidden">🏠</span>
+
             </button>
             
             <div className="hidden h-4 w-px bg-amber-50/30 sm:block"></div>
@@ -92,66 +97,9 @@ export function TopBar() {
           Drag the street <span className="opacity-50">·</span> tap your home to enter
         </div>
       </div>
-
-      <AnimatePresence>
-        {showModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
-            onClick={() => setShowModal(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, y: 20, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              exit={{ scale: 0.9, y: 20, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md overflow-hidden rounded-2xl bg-amber-50 p-6 shadow-2xl ring-4 ring-amber-900/20"
-            >
-              <h2 className="mb-2 text-xl font-black text-amber-950">Move to a new house?</h2>
-              <p className="mb-4 text-sm text-amber-900/80">
-                Warning: Joining a new household with an invite code will forfeit your access to your current shared fridge.
-              </p>
-
-              {error && (
-                <div className="mb-4 rounded border border-rose-200 bg-rose-50 p-2 text-sm text-rose-600">
-                  {error}
-                </div>
-              )}
-
-              <form onSubmit={handleSwitchHouse} className="flex flex-col gap-3">
-                <input
-                  type="text"
-                  placeholder="Paste 6-character Invite Code"
-                  value={inviteCode}
-                  onChange={(e) => setInviteCode(e.target.value)}
-                  maxLength={6}
-                  required
-                  className="rounded-lg border-2 border-amber-200 bg-white p-3 text-center font-mono text-xl tracking-widest text-amber-950 outline-none focus:border-amber-500"
-                />
-                
-                <div className="mt-2 flex gap-3">
-                  <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    className="flex-1 rounded-lg bg-amber-200/50 py-3 font-bold text-amber-900 hover:bg-amber-200"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="flex-1 rounded-lg bg-amber-900 py-3 font-bold text-amber-50 hover:bg-amber-950 disabled:opacity-50"
-                  >
-                    {isSubmitting ? "Packing boxes..." : "Join House"}
-                  </button>
-                </div>
-              </form>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Suspense fallback={null}>
+        <SwitchHouseModal isOpen={showModal} onClose={()=>setShowModal(false)} />
+      </Suspense>
     </>
   );
 }
