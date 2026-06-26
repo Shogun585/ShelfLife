@@ -48,7 +48,7 @@ export function AuthForm() {
   };
 
   return (
-    <form onSubmit={onSubmit} className="flex w-full flex-col gap-4 mt-3 ml-3 px-6 pb-4 sm:px-8">
+    <form onSubmit={onSubmit} className="flex w-full flex-col gap-4 mt-3 ml-3 px-6 pb-4 sm:px-8 mb-2">
       
       <div className="mx-auto mb-4 flex w-max rounded-full bg-amber-950/20 p-1 shadow-inner backdrop-blur-sm">
         <button
