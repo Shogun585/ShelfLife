@@ -109,7 +109,7 @@ export function InventoryModal({ open, onClose }) {
                     </p>
                   ) : (
                     visible.map((item) => (
-                      <ItemRow key={item._id} item={item} onDelete={remove} />
+                      <ItemRow key={item._id} item={item} onDelete={remove} onStatusChange={remove}/>
                     ))
                   )}
                 </div>
