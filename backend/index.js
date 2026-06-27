@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const PORT = process.env.PORT;
 const ORIGIN = process.env.ORIGIN;
+const ORIGIN2 = process.env.ORIGIN2;
 const BASE_URL = process.env.BASE_URL;
 const app = express();
 
@@ -20,7 +21,7 @@ setInterval(()=>{
 
 app.use(express.json());
 app.use(cors({
-    origin : ORIGIN
+    origin : [ORIGIN, ORIGIN2]
 }));
 app.use('/api', apiRouter);
 
