@@ -15,7 +15,7 @@ export function HangingSign({ children }) {
         <motion.div
           animate={{ rotate: [-1.2, 1.2, -1.2] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
-          style={{ transformOrigin: "top center" }}
+          style={{ transformOrigin: "top center", willChange : "transform, opacity" }}
           className="relative flex flex-col items-center"
         >
           
@@ -58,6 +58,7 @@ export function HangingSign({ children }) {
                 initial={{ x: "-150%" }}
                 animate={{ x: "150%" }}
                 transition={{ delay: 0.7, duration: 1.2, ease: "easeInOut" }}
+                style={{willChange : "transform, opacity"}}
                 className="absolute inset-0 h-full w-[150%] skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent"
               />
             </div>

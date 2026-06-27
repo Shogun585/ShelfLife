@@ -6,6 +6,7 @@ import { ItemRow } from "./ItemRow";
 import { AddItemForm } from "./AddItemForm";
 import { api } from "../../lib/api";
 import { useNavigate } from "react-router-dom";
+import Badge from "../ui/Badge";
 
 const importInviteModal = () => import('./InviteModal');
 const InviteModal = lazy(importInviteModal);
@@ -61,6 +62,7 @@ export function InventoryModal({ open, onClose }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            style={{willChange : "transform, opacity"}}
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4 backdrop-blur-sm"
             onClick={onClose}
           >
@@ -70,6 +72,7 @@ export function InventoryModal({ open, onClose }) {
               exit={{ scale: 0.9, y: 30, opacity: 0 }}
               transition={{ type: "spring", stiffness: 260, damping: 24 }}
               onClick={(e) => e.stopPropagation()}
+              style={{willChange : "transform, opacity"}}
               className="relative flex max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-amber-50 shadow-2xl ring-1 ring-amber-900/20"
             >
 
@@ -133,18 +136,5 @@ export function InventoryModal({ open, onClose }) {
       </Suspense>
       
     </>
-  );
-}
-
-function Badge({ color, label }) {
-  const map = {
-    emerald: "bg-emerald-100 text-emerald-800 ring-emerald-300",
-    amber: "bg-amber-100 text-amber-800 ring-amber-300",
-    rose: "bg-rose-100 text-rose-800 ring-rose-300",
-  };
-  return (
-    <span className={`rounded-full px-2 py-0.5 font-semibold ring-1 ${map[color]}`}>
-      {label}
-    </span>
   );
 }

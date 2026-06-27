@@ -18,6 +18,7 @@ export default function InviteModal({ open, onClose, inviteCode, householdName }
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          style={{willChange : "transform, opacity"}}
           className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
           onClick={onClose}
         >
@@ -26,6 +27,7 @@ export default function InviteModal({ open, onClose, inviteCode, householdName }
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.9, y: 20, opacity: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            style={{willChange : "transform, opacity"}}
             onClick={(e) => e.stopPropagation()}
             className="relative flex w-full max-w-sm flex-col overflow-hidden rounded-2xl bg-amber-50 p-6 shadow-2xl ring-4 ring-amber-900/20 text-center"
           >

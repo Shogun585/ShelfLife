@@ -30,6 +30,7 @@ export default function SwitchHouseModal({isOpen, onClose}){
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
+                    style={{willChange : "transform, opacity"}}
                     className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
                     onClick={onClose}
                 >
@@ -38,6 +39,7 @@ export default function SwitchHouseModal({isOpen, onClose}){
                         initial={{ scale: 0.9, y: 20, opacity: 0 }}
                         animate={{ scale: 1, y: 0, opacity: 1 }}
                         exit={{ scale: 0.9, y: 20, opacity: 0 }}
+                        style={{willChange : "transform, opacity"}}
                         onClick={(e) => e.stopPropagation()}
                         className="w-full max-w-md overflow-hidden rounded-2xl bg-amber-50 p-6 shadow-2xl ring-4 ring-amber-900/20"
                     >

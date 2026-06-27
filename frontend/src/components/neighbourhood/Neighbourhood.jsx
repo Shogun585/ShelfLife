@@ -56,6 +56,7 @@ export default function Neighborhood() {
           dragConstraints={containerRef}
           dragElastic={0.18}
           dragTransition={{ bounceStiffness: 260, bounceDamping: 28 }}
+          style={{willChange : "transform, opacity"}}
           onPointerDown={() => { dragStartX.current = x.get(); }}
           animate={zooming ? {
             scale: 3.4,
@@ -111,6 +112,7 @@ export default function Neighborhood() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.55, duration: 0.35 }}
+            style={{willChange : "transform, opacity"}}
             className="pointer-events-none absolute inset-0 z-40 bg-black"
           />
         )}

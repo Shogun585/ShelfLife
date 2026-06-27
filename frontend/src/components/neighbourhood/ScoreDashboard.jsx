@@ -73,6 +73,7 @@ export function ScoreDashboard() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            style={{willChange : "transform, opacity"}}
             className="fixed left-[15%] top-20 z-50 mt w-[85vw] max-w-[280px] -translate-x-1/2 overflow-hidden rounded-2xl border border-white/50 bg-white p-5 shadow-2xl backdrop-blur-xl lg:bg-white/50 lg:left-1/2 lg:mt-6 sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-3 sm:w-72 sm:translate-x-0"
           >
             <div className="flex flex-col items-center text-center">
