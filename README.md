@@ -1,6 +1,6 @@
 # 🏡 ShelfLife
 
-**Try it out at :** __https://shelflifes.netlify.app/__
+**Try it out at :** __https://shelf-life-alpha.vercel.app//__
 
 **ShelfLife** is a collaborative household management platform designed to track your fridge inventory and reduce food waste. Built with a modern Node.js/React architecture, it features an interactive, physics-based neighborhood UI, robust user authentication, and real-time roommate synchronization.
 
