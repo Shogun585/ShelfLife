@@ -42,7 +42,8 @@ jobs:
           BASE_URL: ${{secrets.BASE_URL}}
           TEST_MONGO_URI: ${{secrets.TEST_MONGO_URI}}
         run: | 
-          npm run test:server
+          npm run test:server &
+          sleep 10
 
       - name: Run Playwright tests
         working-directory: ./frontend
