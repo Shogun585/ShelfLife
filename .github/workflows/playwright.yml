@@ -37,7 +37,9 @@ jobs:
         env: 
           NODE_ENV: test
           TEST_MONGO_URI: ${{secrets.TEST_MONGO_URI}}
-        run: npm run test:server &
+        run: | 
+          npm run test:server &
+          sleep 10
 
       - name: Run Playwright tests
         working-directory: ./frontend
