@@ -45,7 +45,8 @@ const globalLimiter = rateLimit({
         message : "Too many requests from this IP, please try again after some time."
     },
     standardHeaders : true,
-    legacyHeaders : false
+    legacyHeaders : false,
+    skip : (req) => process.env.NODE_ENV === 'test'
 });
 
 const authLimiter = rateLimit({
@@ -55,7 +56,8 @@ const authLimiter = rateLimit({
         message : "Too many requests from this IP, please try again after some time."
     },
     standardHeaders : true,
-    legacyHeaders : true
+    legacyHeaders : true,
+    skip : (req) => process.env.NODE_ENV === 'test'
 });
 
 module.exports = {
