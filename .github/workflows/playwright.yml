@@ -36,10 +36,13 @@ jobs:
         working-directory: ./backend
         env: 
           NODE_ENV: test
+          PORT: 8000
+          SECRET_KEY: ${{secrets.SECRET_KEY}}
+          ORIGIN: ${{secrets.ORIGIN}}
+          BASE_URL: ${{secrets.BASE_URL}}
           TEST_MONGO_URI: ${{secrets.TEST_MONGO_URI}}
         run: | 
-          npm run test:server &
-          sleep 10
+          npm run test:server
 
       - name: Run Playwright tests
         working-directory: ./frontend
