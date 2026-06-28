@@ -18,11 +18,12 @@ export const House = forwardRef(({ variant, isUser = false, onClick }, ref) => {
   return (
     <div 
       ref={ref}
-      className={`relative shrink-0 ${shiftClass}`} 
+      className={`relative shrink-0 ${shiftClass} group`} 
       style={{ width: isUser ? "36vh" : "28vh" }}
     >
       <motion.button
         type="button"
+        data-testid="user-house"
         onClick={onClick}
         whileHover={isUser ? { scale: 1.08 } : {}}
         className={`block w-full ${isUser ? "cursor-pointer" : "cursor-default"}`}
@@ -34,6 +35,14 @@ export const House = forwardRef(({ variant, isUser = false, onClick }, ref) => {
             <div className="absolute -bottom-[0.5vh] left-1/2 h-[1.5vh] w-[1.5vh] -translate-x-1/2 rotate-45 bg-amber-700" />
           </div>
         )}
+
+        {!isUser && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-white/60 opacity-0 backdrop-blur-[2px] transition-all duration-300 group-hover:opacity-100">
+          <span className="translate-y-4 rounded-full bg-white px-4 py-2 text-sm font-bold tracking-wide text-gray-700 shadow-lg transition-transform duration-300 group-hover:translate-y-0">
+            Coming soon...
+          </span>
+        </div>
+      )}
         <img
           src={HOUSE_SRC[variant]}
           alt={`${variant} house`}
