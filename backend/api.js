@@ -5,12 +5,15 @@ const authRouter = require('./routes/auth');
 const householdRouter = require('./routes/household');
 const dashboardRouter = require('./routes/dashboard');
 const itemRouter = require('./routes/item');
+const { authLimiter } = require('./utils/middleware');
 
 router.use((req, res, next) => {
   res.setHeader('X-Author', 'Abhilash Singh');
   res.setHeader('X-Project-Name', 'ShelfLife');
   next();
 });
+
+router.use('/auth', authLimiter, authRouter)
 
 
 router.use('/auth', authRouter);

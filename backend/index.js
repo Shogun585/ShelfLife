@@ -8,6 +8,10 @@ const BASE_URL = process.env.BASE_URL;
 const app = express();
 
 const apiRouter = require('./api');
+const { globalLimiter } = require('./utils/middleware');
+
+app.set('trust proxy', 1);
+app.use(globalLimiter);
 
 app.get('/keep-alive', (req, res)=>{
     res.send("Keep alive");
