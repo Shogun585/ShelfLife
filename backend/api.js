@@ -5,6 +5,7 @@ const authRouter = require('./routes/auth');
 const householdRouter = require('./routes/household');
 const dashboardRouter = require('./routes/dashboard');
 const itemRouter = require('./routes/item');
+const testRouter = require('./routes/testing');
 const { authLimiter } = require('./utils/middleware');
 
 router.use((req, res, next) => {
@@ -15,7 +16,7 @@ router.use((req, res, next) => {
 
 router.use('/auth', authLimiter, authRouter)
 
-
+router.use('/testing', testRouter);
 router.use('/auth', authRouter);
 router.use('/households', householdRouter);
 router.use('/items', itemRouter);

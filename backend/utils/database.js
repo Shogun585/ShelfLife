@@ -1,13 +1,14 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const MONGO_URI = process.env.MONGO_URI;
+const NODE_ENV = process.env.NODE_ENV;
+const MONGO_URI = NODE_ENV === 'test' ? process.env.TEST_MONGO_URI : process.env.MONGO_URI;
 
 const {Schema} = mongoose;
 
 const conenctToDB = async () => {
     try{
         const conn = await mongoose.connect(MONGO_URI);
-        console.log(`DB connection established, host : ${conn.connection.host}`)
+        console.log(`${NODE_ENV === 'test' ? 'Test' : 'Production'} DB connection established, host : ${conn.connection.host}`)
     }catch(err){
         console.error(err);
         process.exit(1);

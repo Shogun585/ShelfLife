@@ -1,0 +1,52 @@
+name : Playwright Tests
+
+on:
+  push: 
+    branches : [main, master]
+  pull_request:
+    branches : [main, master]
+
+jobs:
+  tests:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Install Playwright browsers
+        working-directory: ./frontend
+        run: npx playwright install --with-deps
+
+      - name: Start backend
+        working-directory: ./backend
+        env: 
+          NODE_ENV: test
+          TEST_MONGO_URI: ${{secrets.TEST_MONGO_URI}}
+        run: npm run test:server &
+
+      - name: Run Playwright tests
+        working-directory: ./frontend
+        run: npx playwright test
+
+      - name: Upload Playwright reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with: 
+          name: playwright-report
+          path: frontend/playwright-report/
+          retention-days: 10
